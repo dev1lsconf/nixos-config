@@ -13,7 +13,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  
   networking.hostName = "thinkcentre"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -199,6 +199,17 @@
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+    
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      # your Open GL, Vulkan and VAAPI drivers
+      # vpl-gpu-rt          # for newer GPUs on NixOS >24.05 or unstable
+      # onevpl-intel-gpu    # for newer GPUs on NixOS <= 24.05
+      intel-media-sdk       # for older GPUs
+    ];
+   };
+   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -223,6 +234,7 @@
         loadModels = [ "llama3.2:3b" "deepseek-r1:1.5b"];
 	};
 
+
   # Enable common container config files in /etc/containers
   virtualisation.containers.enable = true;
   virtualisation = {
@@ -235,7 +247,45 @@
   };
   };
 
-		
+	
+  # nixos-containers
+  #networking.nat = {
+  #enable = true;
+  #internalInterfaces = ["ve-+"];
+  #externalInterface = "ens3";
+  # Lazy IPv6 connectivity for the container
+  #enableIPv6 = true;
+  #};
+
+  #containers.evilcorp = {
+  #autoStart = true;
+  #privateNetwork = true;
+  #hostAddress = "192.168.100.10";
+  #localAddress = "192.168.100.11";
+  #hostAddress6 = "fc00::1";
+  #localAddress6 = "fc00::2";
+  #config = { config, pkgs, lib, ... }: {
+
+  #  services.httpd = {
+  #    enable = true;
+  #    adminAddr = "dev1ls@sdf.org";
+  #  };
+
+  #  networking = {
+  #    firewall.allowedTCPPorts = [ 80 ];
+
+      # Use systemd-resolved inside the container
+      # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+  #    useHostResolvConf = lib.mkForce false;
+  #  };
+    
+  #  services.resolved.enable = true;
+
+  #  system.stateVersion = "25.11";
+  #  };
+  # }; 
+
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
