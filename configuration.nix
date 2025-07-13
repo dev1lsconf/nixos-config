@@ -1,35 +1,34 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# /home/dev1ls/nixos-config/configuration.nix
+# Expertly Refactored by Your AI Assistant (Final Portal Implementation Fix)
 
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
-  # Bootloader.
+  # 1. Global Settings
+  # ============================================================================
+  nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  system.stateVersion = "25.05"; # System's state version
+
+  # 2. Bootloader
+  # ============================================================================
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
-  networking.hostName = "thinkcentre"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  # 3. Networking
+  # ============================================================================
+  networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
+  networking.firewall.allowedTCPPorts = [ 22 80 9443 ];
 
-  # Set your time zone.
+  # 4. Internationalisation & Time
+  # ============================================================================
   time.timeZone = "Europe/Madrid";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "es_ES.UTF-8";
     LC_IDENTIFICATION = "es_ES.UTF-8";
@@ -42,275 +41,181 @@
     LC_TIME = "es_ES.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the Pantheon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.pantheon.enable = true;
-  services.xserver.windowManager.i3.enable = true; 
-  services.xserver.windowManager.cwm.enable = true;
-
-   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "es";
-    variant = "";
+  # 5. Graphics & Audio
+  # ============================================================================ 
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-sdk # For older Intel GPUs
+    ];
   };
 
-  # Configure console keymap
-  console.keyMap = "es";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-  
+  # 6. GUI & Windowing System
+  # ============================================================================
+  services.xserver = {
+    enable = true;
+    displayManager.lightdm.enable = true;
+    desktopManager.pantheon.enable = true;
+    windowManager.i3.enable = true;
+    windowManager.cwm.enable = true;
+    xkb = { layout = "es"; variant = ""; };
+  };
+  console.keyMap = "es";
+  programs.dconf.enable = true;
+  # XDG Desktop Portals are required for Flatpak and other sandboxed applications.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # 7. System Services
+  # ============================================================================
+  services.printing.enable = true;
+  services.flatpak.enable = true;
+  services.openssh.enable = true;
+  services.tailscale.enable = true;
+  services.ollama.enable = true;
+
+  # 8. Virtualisation
+  # ============================================================================
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
+
+  services.cockpit = {
+  enable = true;
+  port = 9090;
+  # openFirewall = true; # Please see the comments section
+  settings = {
+    WebService = {
+      AllowUnencrypted = true;
+    };
+  };
+};
+
+  # 9. Security
+  # ============================================================================
+  security.doas = {
+    enable = true;
+    extraRules = [{ users = [ "dev1ls" ]; keepEnv = true; persist = true; }];
+  };
+  security.sudo.enable = false;
+
+  # 10. System-wide Packages
+  # ============================================================================
+  environment.systemPackages = with pkgs; [ wget cockpit ];
+
+  # 11. User Definition and Home Manager Configuration
+  # ============================================================================
   users.users.dev1ls = {
     isNormalUser = true;
     description = "dev1ls";
     extraGroups = [ "networkmanager" "wheel" "docker" "podman" ];
-    packages = with pkgs; [
-    #  thunderbird
-       neovim
-       vim
-       fzf
-       fish
-       tmux
-       nodejs
-       fd
-       twtxt
-       mosh
-       nitrogen
-       brave
-       google-chrome
-       spotify
-       mpv
-       ripgrep
-       alacritty
-       sakura
-       unzip
-       kitty
-       tut
-       toot
-       stremio
-       pcmanfm
-       nautilus
-       castero
-       nsxiv
-       unrar
-       curl
-       wget
-       claude-code
-       ghostty
-       ranger
-       glances
-       python313Packages.textual
-       mpv
-       htop
-       python311
-       python3
-       git
-       st
-       gcc
-       gotop
-       podman-tui
-       glances
-       bluetui
-       duf
-       ncdu
-       lazydocker
-       cloudflared
-       gparted
-       cloudflare-cli
-       cloudflare-warp     
-       lxappearance
-       podman-compose
-       rofi
-       reddit-tui
-       unetbootin
-       nautilus
-       cava
-       polybar
-       i3-gaps
-       picom 
-       neofetch  
-       gtk3 
-       tty-clock
-       powerline
-       profanity
-       bombadillo
-       amfora
-       lynx
-       bmon
-       gh
-       pavucontrol
-       shutter
-       pipx
-       surf
-       yt-dlp
-       invidtui
-       newsboat
-       ffmpeg
-       gnome-screenshot
-       (python3.withPackages (ps: with ps; [
-         requests
-         pandas
-	 textual
-       ]))
-
-    ];
   };
 
-   # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-   
-  # Flatpack
-  services.flatpak.enable = true;
-
-  # Docker
-  virtualisation.docker.enable = true;
-  
-  #tailscale
-  services.tailscale.enable = true;
-
-  programs.dconf.enable = true;
-  
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
+  home-manager.backupFileExtension = "backup";
+  home-manager.users.dev1ls = {
+    # This must match the version of Home Manager you are using in your flake.nix
+    home.stateVersion = "24.05";
     
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      # your Open GL, Vulkan and VAAPI drivers
-      # vpl-gpu-rt          # for newer GPUs on NixOS >24.05 or unstable
-      # onevpl-intel-gpu    # for newer GPUs on NixOS <= 24.05
-      intel-media-sdk       # for older GPUs
+    home.enableNixpkgsReleaseCheck = false;
+
+    home.packages = with pkgs; [
+      # --- CLI Tools ---
+      fish
+      tmux
+      alacritty
+      kitty
+      sakura
+      st
+      powerline
+      tty-clock
+      neovim
+      vim
+      git
+      gcc
+      fzf
+      nodejs
+      fd
+      ripgrep
+      curl
+      unzip
+      unrar
+      pipx
+      (python3.withPackages (ps: with ps; [ requests pandas textual ]))
+      glances
+      htop
+      gotop
+      duf
+      ncdu
+      gparted
+      bluetui
+      ranger
+      pcmanfm
+      nautilus
+      gemini-cli
+      twtxt
+      mosh
+      tut
+      toot
+      castero
+      invidtui
+      newsboat
+      reddit-tui
+      profanity
+      bombadillo
+      amfora
+      lynx
+      bmon
+      gh
+      emoji-picker
+      translate-shell
+      alsa-utils
+      pamixer
+      ncpamixer
+
+      # --- GUI Apps ---
+      brave
+      google-chrome
+      spotify
+      mpv
+      stremio
+      nsxiv
+      ffmpeg
+      yt-dlp
+      gnome-screenshot
+      shutter
+      i3
+      polybar
+      rofi
+      picom
+      neofetch
+      nitrogen
+      cava
+      lxappearance
+      pavucontrol
+      cloudflared
+      cloudflare-cli
+      podman-tui
+      podman-compose
+      lazydocker
+      unetbootin
+      ghostty
     ];
-   };
-   
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-  ];
-  
-  security.doas.enable = true;
-  security.sudo.enable = false;
-  security.doas.extraRules = [{
-  users = ["dev1ls"];
-  # Optional, retains environment variables while running commands 
-  # e.g. retains your NIX_PATH when applying your config
-  keepEnv = true; 
-  persist = true;  # Optional, only require password verification a single time
-  }];
 
-  
-  services.ollama = {
-    enable = true;
-      # Optional: preload models, see https://ollama.com/library
-        loadModels = [ "llama3.2:3b" "deepseek-r1:1.5b"];
-	};
-
-
-  # Enable common container config files in /etc/containers
-  virtualisation.containers.enable = true;
-  virtualisation = {
-    podman = {
-        enable = true;
-  # Create a `docker` alias for podman, to use it as a drop-in replacement
-  dockerCompat = false;
-  # Required for containers under podman-compose to be able to talk to each other.
-  defaultNetwork.settings.dns_enabled = true;
+    # --- Program Configuration ---
+    programs.firefox.enable = true;
+    programs.git.enable = true;
+    programs.fish.enable = true;
   };
-  };
-
-	
-  # nixos-containers
-  #networking.nat = {
-  #enable = true;
-  #internalInterfaces = ["ve-+"];
-  #externalInterface = "ens3";
-  # Lazy IPv6 connectivity for the container
-  #enableIPv6 = true;
-  #};
-
-  #containers.evilcorp = {
-  #autoStart = true;
-  #privateNetwork = true;
-  #hostAddress = "192.168.100.10";
-  #localAddress = "192.168.100.11";
-  #hostAddress6 = "fc00::1";
-  #localAddress6 = "fc00::2";
-  #config = { config, pkgs, lib, ... }: {
-
-  #  services.httpd = {
-  #    enable = true;
-  #    adminAddr = "dev1ls@sdf.org";
-  #  };
-
-  #  networking = {
-  #    firewall.allowedTCPPorts = [ 80 ];
-
-      # Use systemd-resolved inside the container
-      # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-  #    useHostResolvConf = lib.mkForce false;
-  #  };
-    
-  #  services.resolved.enable = true;
-
-  #  system.stateVersion = "25.11";
-  #  };
-  # }; 
-
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 80 9443 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
-
 }

@@ -30,7 +30,7 @@
         modules = [
           # El archivo principal de tu configuración
           ./configuration.nix
-
+          
           # (Opcional) Integra el módulo de Home Manager para todo el sistema
           home-manager.nixosModules.home-manager
         ];
