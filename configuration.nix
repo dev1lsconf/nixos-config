@@ -96,7 +96,6 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.ollama.enable = true;
-  services.cockpit.enable = true;
 
   # 8. Virtualisation
   # ============================================================================
@@ -129,7 +128,6 @@
     hyprpaper     # Gestor de fondos de pantalla
     wl-clipboard  # Utilidades de portapapeles para Wayland
     cliphist      # Historial del portapapeles
-    (pkgs.cockpit-podman)
   ];
 
   # 11. User Definition and Home Manager Configuration
