@@ -1,7 +1,7 @@
 # /home/dev1ls/nixos-config/configuration.nix
-# Expertly Refactored by Your AI Assistant (Final Portal Implementation Fix)
+# Modificado para añadir Hyprland
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }: # Se añade 'inputs' para poder usar el flake de Hyprland opcionalmente
 
 {
   imports = [
@@ -10,6 +10,7 @@
 
   # 1. Global Settings
   # ============================================================================
+  nixpkgs.overlays = [ (import ./overlays.nix) ];
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05"; # System's state version
@@ -23,7 +24,7 @@
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 9443 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 9443 9090 ];
 
   # 4. Internationalisation & Time
   # ============================================================================
@@ -58,22 +59,34 @@
     pulse.enable = true;
   };
 
-  # 6. GUI & Windowing System
+  # 6. GUI & Windowing System (Modificado para Hyprland)
   # ============================================================================
   services.xserver = {
     enable = true;
-    displayManager.lightdm.enable = true;
-    desktopManager.pantheon.enable = true;
-    windowManager.i3.enable = true;
-    windowManager.cwm.enable = true;
+    displayManager.lightdm.enable = true; # lightdm funciona bien con Hyprland
+    #desktopManager.pantheon.enable = true; # Deshabilitado para evitar conflictos con Hyprland
+    windowManager.i3.enable = true;      # Puedes mantener i3
+    windowManager.cwm.enable = true;     # y cwm como opciones en lightdm
     xkb = { layout = "es"; variant = ""; };
   };
   console.keyMap = "es";
   programs.dconf.enable = true;
-  # XDG Desktop Portals are required for Flatpak and other sandboxed applications.
+
+  # Habilitamos Hyprland y Wayland
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    # Opcional: si quieres usar la versión de Hyprland del flake en lugar de la de nixpkgs
+    # package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  };
+
+  # Portales XDG para Wayland (Hyprland) y GTK
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [ 
+      pkgs.xdg-desktop-portal-gtk 
+      pkgs.xdg-desktop-portal-hyprland # Específico para Hyprland
+    ];
   };
 
   # 7. System Services
@@ -83,6 +96,7 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.ollama.enable = true;
+  services.cockpit.enable = true;
 
   # 8. Virtualisation
   # ============================================================================
@@ -91,18 +105,7 @@
     dockerCompat = true;
     defaultNetwork.settings.dns_enabled = true;
   };
-
-  services.cockpit = {
-  enable = true;
-  port = 9090;
-  # openFirewall = true; # Please see the comments section
-  settings = {
-    WebService = {
-      AllowUnencrypted = true;
-    };
-  };
-};
-
+  
   # 9. Security
   # ============================================================================
   security.doas = {
@@ -111,9 +114,23 @@
   };
   security.sudo.enable = false;
 
-  # 10. System-wide Packages
+  # 10. System-wide Packages (Añadidos paquetes para Hyprland)
   # ============================================================================
-  environment.systemPackages = with pkgs; [ wget cockpit ];
+  environment.systemPackages = with pkgs; [ 
+    # Originales
+    wget 
+    neovim 
+    git # Añadido para que Flakes funcione correctamente
+
+    # Esenciales para Hyprland
+    rofi-wayland  # Lanzador de aplicaciones para Wayland
+    waybar        # Barra de estado
+    mako          # Demonio de notificaciones
+    hyprpaper     # Gestor de fondos de pantalla
+    wl-clipboard  # Utilidades de portapapeles para Wayland
+    cliphist      # Historial del portapapeles
+    (pkgs.cockpit-podman)
+  ];
 
   # 11. User Definition and Home Manager Configuration
   # ============================================================================
@@ -183,6 +200,13 @@
       alsa-utils
       pamixer
       ncpamixer
+      gcc
+      gnumake 
+      pkg-config 
+      curl 
+      json_c
+      libgnurl
+      inih
 
       # --- GUI Apps ---
       brave
@@ -211,6 +235,8 @@
       lazydocker
       unetbootin
       ghostty
+      podman-desktop
+      zenith
     ];
 
     # --- Program Configuration ---

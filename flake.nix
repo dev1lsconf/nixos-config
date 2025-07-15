@@ -14,11 +14,17 @@
       url = "github:nix-community/home-manager/release-24.05"; # Usa la versión compatible
       inputs.nixpkgs.follows = "nixpkgs"; # Asegura que use la misma versión de nixpkgs
     };
+
+    # Añadimos Hyprland
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # 2. Salidas (Outputs)
   # Aquí defines lo que tu Flake "produce". En este caso, una configuración de NixOS.
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs: {
 
     # La configuración de tu sistema NixOS
     nixosConfigurations = {
