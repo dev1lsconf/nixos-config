@@ -25,7 +25,7 @@
       (python3.withPackages (ps: with ps; [ requests pandas textual ]))
       glances htop gotop duf ncdu gparted bluetui ranger pcmanfm
       nautilus gemini-cli twtxt mosh tut toot castero invidtui
-      newsboat reddit-tui profanity bombadillo amfora lynx bmon gh
+      newsboat reddit-tui profanity bombadillo amfora lynx bmon
       emoji-picker translate-shell alsa-utils pamixer ncpamixer gnumake
       pkg-config json_c libgnurl inih hyprpaper swww grim slurp wf-recorder
 
@@ -41,6 +41,10 @@
     # --- Program Configuration ---
     programs.firefox.enable = true;
     programs.git.enable = true;
+    programs.gh = {
+      enable = true;
+      settings.git_protocol = "ssh";
+    };
     programs.fish.enable = true;
   };
 }
