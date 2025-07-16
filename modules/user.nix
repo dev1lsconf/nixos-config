@@ -28,6 +28,8 @@
       newsboat reddit-tui profanity bombadillo amfora lynx bmon
       emoji-picker translate-shell alsa-utils pamixer ncpamixer gnumake
       pkg-config json_c libgnurl inih hyprpaper swww grim slurp wf-recorder
+      
+
 
       # --- GUI Apps ---
       brave google-chrome spotify mpv stremio nsxiv ffmpeg yt-dlp
