@@ -1,4 +1,3 @@
-# /etc/nixos/flake.nix
 {
   description = "NixOS Flakes Dev1ls";
 
@@ -9,22 +8,25 @@
     # Usamos la rama estable de NixOS 25.05
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     
+    # Añadimos nixpkgs-unstable para paquetes más recientes si es necesario
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     # (Opcional, pero muy común) Home Manager para gestionar la configuración de usuario
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05"; # Usa la versión compatible
+      url = "github:nix-community/home-manager/release-25.05"; # Usa la versión compatible
       inputs.nixpkgs.follows = "nixpkgs"; # Asegura que use la misma versión de nixpkgs
     };
 
     # Añadimos Hyprland
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # <-- Hyprland ahora sigue nixpkgs-unstable
     };
   };
 
   # 2. Salidas (Outputs)
   # Aquí defines lo que tu Flake "produce". En este caso, una configuración de NixOS.
-  outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, hyprland, nixpkgs-unstable, ... }@inputs: {
 
     # La configuración de tu sistema NixOS
     nixosConfigurations = {
