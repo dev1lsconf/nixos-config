@@ -27,7 +27,7 @@
       nautilus gemini-cli twtxt mosh tut toot castero invidtui
       newsboat reddit-tui profanity bombadillo amfora lynx bmon gh
       emoji-picker translate-shell alsa-utils pamixer ncpamixer gnumake
-      pkg-config json_c libgnurl inih hyprpaper
+      pkg-config json_c libgnurl inih hyprpaper swww grim slurp wf-recorder
 
       # --- GUI Apps ---
       brave google-chrome spotify mpv stremio nsxiv ffmpeg yt-dlp
@@ -35,7 +35,7 @@
       nitrogen cava lxappearance pavucontrol cloudflared
       cloudflare-cli podman-tui podman-compose lazydocker unetbootin
 
-      ghostty podman-desktop zenith
+      ghostty podman-desktop zenith waybar wl-clipboard wlogout spotify
     ];
 
     # --- Program Configuration ---

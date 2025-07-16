@@ -29,7 +29,7 @@
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 9443 9090 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 6050 ];
 
   # 4. Internationalisation & Time
   # ============================================================================
