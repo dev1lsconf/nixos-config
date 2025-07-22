@@ -33,15 +33,16 @@
       # ¡¡IMPORTANTE!! Cambia "mi-nixos-pc" por el hostname real de tu máquina.
       # Puedes ver tu hostname con el comando `hostname`.
       thinkcentre = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux"; # O "aarch64-linux" para ARM
-        specialArgs = { inherit inputs; }; # Permite acceder a los inputs en otros archivos
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
-          # El archivo principal de tu configuración
+         # Tu configuración principal
           ./configuration.nix
-          
-          # (Opcional) Integra el módulo de Home Manager para todo el sistema
+	  ./containers/ergo.nix
+
+         # Módulo de Home Manager
           home-manager.nixosModules.home-manager
-        ];
+        ]; # <--- This closes the modules list
       };
       
       # Puedes añadir más máquinas aquí si gestionas varias

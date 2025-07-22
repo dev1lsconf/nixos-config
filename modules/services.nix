@@ -13,15 +13,29 @@
     # settings.KbdInteractiveAuthentication = false
     settings.PermitRootLogin = "no";
   };
+  
+     
+  # Configura el honeypot en el puerto estándar SSH
+  services.openssh.ports = [ 2225 ];
+ 
+  services.endlessh = {
+       enable = true;
+       port = 22; # Puerto donde Endlessh escuchará (puedes cambiarlo)
+     };
+  
 
   services.tailscale.enable = true;
   services.ollama.enable = true;
   services.gnome.gnome-keyring.enable = true;
-
+  
+  
   # Virtualisation
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
     defaultNetwork.settings.dns_enabled = true;
   };
+  
+   
+  
 }

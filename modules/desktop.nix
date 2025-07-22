@@ -5,6 +5,7 @@
   # GUI & Windowing System
   services.xserver = {
     enable = true;
+    videoDrivers = [ "modesetting" ];
     displayManager.lightdm.enable = true;  
     windowManager.i3.enable = true;
     windowManager.cwm.enable = true;
@@ -35,6 +36,7 @@
       intel-media-sdk
     ];
   };
+  
 
   security.rtkit.enable = true;
   services.pipewire = {

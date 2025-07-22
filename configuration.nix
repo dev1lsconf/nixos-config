@@ -1,6 +1,7 @@
 # /home/dev1ls/nixos-config/configuration.nix
 # Archivo de configuración principal de NixOS
-{ config, pkgs, inputs, ... }:
+# COPIA MODIFICADA con Steam y Proton
+{ config, pkgs, inputs, lib, ... }:
 
 {
   imports = [
@@ -16,7 +17,18 @@
 
   # 1. Global Settings
   # ============================================================================
-  nixpkgs.config.allowUnfree = true;
+  # MEJORA: Control explícito sobre paquetes 'unfree' en lugar de permitir todos.
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-run"
+    "spotify"
+    "brave"
+    "google-chrome"
+    "unrar"
+    "stremio-shell"
+    "stremio-server"
+    "steam-unwrapped"
+  ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05";
 
@@ -24,13 +36,39 @@
   # ============================================================================
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
   # 3. Networking
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 6050 ];
-  
+  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 6667 ];
+ 
+  services.yggdrasil = {
+  enable = true;
+  persistentKeys = true; # Store keys in /var/lib/yggdrasil/private.key
+  settings = {
+    Peers = [
+      "tls://spain.magicum.net:36901"
+      "tcp://rendezvous.anton.molyboha.me:50421"
+      "quic://vix.duckdns.org:36014"
+      "tls://vix.duckdns.org:36014"
+      "quic://spain.magicum.net:36900"
+      # Add more peers from https://github.com/yggdrasil-network/public-peers
+    ];
+    IfName = "ygg0";
+    NodeInfo = {
+      name = "dev1ls.thinkcentre";
+      };
+      ZoneInfo = {
+        "dev1ls.ygg" = {
+          "A" = [ "200:6823:aabc:7629:cd2d:e9d7:cf7f:c6f8" ]; # Reemplaza con tu dirección IPv6 de Yggdrasil
+          "TXT" = [ "Servicio web en Yggdrasil - dev1ls homepage" ];
+        };
+      };
+    };
+  };
+   
   # Enable Bluetooth
   hardware.bluetooth.enable = true;
 
@@ -54,6 +92,7 @@
   # ============================================================================
   environment.systemPackages = with pkgs; [
     git # Added git for system-wide availability
+    prometheus-node-exporter
   ];
 
   # 6. System Maintenance (Paso 4)
@@ -72,4 +111,13 @@
     extraRules = [{ users = [ "dev1ls" ]; keepEnv = true; persist = true; }];
   };
   security.sudo.enable = false;
+
+  # 8. Gaming Support
+  # ============================================================================
+  # AÑADIDO: Habilita Steam y sus dependencias de forma idiomática.
+  programs.steam.enable = true;
+
+  # AÑADIDO: Habilita el soporte para gráficos 32-bit, crucial para Steam y Proton.
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
 }
