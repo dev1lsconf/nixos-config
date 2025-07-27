@@ -19,24 +19,22 @@
     #xdg.configFile."systemd/user/xdg-desktop-portal-hyprland.service".source = lib.mkForce null;
 
     home.packages = with pkgs; [
-      # --- CLI Tools ---
+
       fish tmux alacritty kitty sakura st powerline tty-clock neovim
       git gcc fzf nodejs fd ripgrep curl unzip unrar pipx
-      (python3.withPackages (ps: with ps; [ requests pandas textual ]))
+      (python3.withPackages (ps: with ps; [ requests pandas textual irc ]))
       glances htop gotop duf ncdu gparted bluetui ranger pcmanfm
       nautilus gemini-cli twtxt mosh tut toot castero invidtui
       newsboat reddit-tui profanity bombadillo amfora lynx bmon weechat
       emoji-picker translate-shell alsa-utils pamixer ncpamixer gnumake
       pkg-config json_c libgnurl inih hyprpaper swww grim slurp wf-recorder
       inetutils vim irssi screenfetch dnsutils glow netscanner bandwhich 
-
-
-      # --- GUI Apps ---
       brave google-chrome spotify mpv stremio nsxiv ffmpeg yt-dlp
       gnome-screenshot shutter i3 polybar rofi picom neofetch lutris
       nitrogen cava lxappearance pavucontrol cloudflared surf ipscan
       cloudflare-cli podman-tui podman-compose lazydocker unetbootin
       ghostty podman-desktop zenith waybar wl-clipboard wlogout transmission
+      blueman
     ];
 
     # --- Program Configuration ---

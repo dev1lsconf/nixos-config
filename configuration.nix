@@ -3,6 +3,10 @@
 # COPIA MODIFICADA con Steam y Proton
 { config, pkgs, inputs, lib, ... }:
 
+# Crear una referencia explícita al conjunto de paquetes principal para evitar problemas de alcance.
+let
+  mainPkgs = pkgs;
+in
 {
   imports = [
     # Archivos base generados por NixOS
@@ -15,9 +19,12 @@
     ./modules/user.nix
   ];
 
+  
+
+  
+
   # 1. Global Settings
   # ============================================================================
-  # MEJORA: Control explícito sobre paquetes 'unfree' en lugar de permitir todos.
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "steam"
     "steam-run"
@@ -28,6 +35,7 @@
     "stremio-shell"
     "stremio-server"
     "steam-unwrapped"
+    "vscodium"
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05";
@@ -42,7 +50,15 @@
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 6667 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 6667 6697 ];
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
+    iptables -A nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
+  '';
+  networking.firewall.extraStopCommands = ''
+    iptables -D nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
+    iptables -D nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
+  '';
  
   services.yggdrasil = {
   enable = true;
@@ -118,6 +134,8 @@
   programs.steam.enable = true;
 
   # AÑADIDO: Habilita el soporte para gráficos 32-bit, crucial para Steam y Proton.
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+  #hardware.opengl.enable = true;
+  #hardware.opengl.driSupport32Bit = true;
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
 }

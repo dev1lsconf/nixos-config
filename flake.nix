@@ -38,7 +38,6 @@
         modules = [
          # Tu configuración principal
           ./configuration.nix
-	  ./containers/ergo.nix
 
          # Módulo de Home Manager
           home-manager.nixosModules.home-manager
