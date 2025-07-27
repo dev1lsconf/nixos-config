@@ -33,7 +33,7 @@
       gnome-screenshot shutter i3 polybar rofi picom neofetch lutris
       nitrogen cava lxappearance pavucontrol cloudflared surf ipscan
       cloudflare-cli podman-tui podman-compose lazydocker unetbootin
-      ghostty podman-desktop zenith waybar wl-clipboard wlogout transmission
+      ghostty podman-desktop zenith waybar wl-clipboard wlogout transmission_4
       blueman
     ];
 
