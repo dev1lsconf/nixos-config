@@ -34,6 +34,7 @@
     enable = true;
     extraPackages = with pkgs; [
       intel-media-sdk
+      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
     ];
   };
   

@@ -21,8 +21,8 @@
    # Basic configuration for git
   programs.git = {
     enable = true;
-    userName = "dev1ls";
-    userEmail = "dev1ls@sdf.org"; # Cambia esto a tu email
+    userName = "dev1lsconf";
+    userEmail = "dev1lsconf@gmail.com"; # Cambia esto a tu email
   };
 
   # Nicer feeling shell
