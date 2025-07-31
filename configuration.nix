@@ -11,12 +11,13 @@ in
   imports = [
     # Archivos base generados por NixOS
     ./hardware-configuration.nix
-    ./security.nix
-
+  
     # --- Módulos personalizados ---
     ./modules/desktop.nix
     ./modules/services.nix
     ./modules/user.nix
+    ./modules/security.nix
+
   ];
 
   
