@@ -50,15 +50,18 @@ in
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 6667 6697 ];
-  networking.firewall.extraCommands = ''
-    iptables -A nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
-    iptables -A nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
-  '';
-  networking.firewall.extraStopCommands = ''
-    iptables -D nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
-    iptables -D nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
-  '';
+  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 ];
+  # Reglas específicas para la interfaz ygg0
+  networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 ];
+
+  #networking.firewall.extraCommands = ''
+  #  iptables -A nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
+  #  iptables -A nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
+  #'';
+  #networking.firewall.extraStopCommands = ''
+  #  iptables -D nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
+  #  iptables -D nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
+  #'';
  
   services.yggdrasil = {
   enable = true;
