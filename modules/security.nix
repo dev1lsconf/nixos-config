@@ -29,30 +29,13 @@
     enable = true;
   };
 
-  # --- 4. Fail2ban (NUEVA SECCIÓN) ---
+  # --- 4. Fail2ban (CORREGIDO) ---
   # Servicio de protección contra ataques de fuerza bruta.
   services.fail2ban = {
     enable = true;
     # IPs a ignorar. Es CRUCIAL añadir localhost y, si tienes, tu IP estática local.
     ignoreIP = [ "127.0.0.1" "::1" ];
-    # Cárceles (Jails) para servicios específicos.
-    jails = {
-      # Nombre de la cárcel, debe coincidir con un filtro existente.
-      "sshd" = ''
-        enabled = true
-        # ¡IMPORTANTE! Especificamos el puerto personalizado de tu SSH.
-        port = 2225
-        # Filtro a usar (ya viene predefinido en Fail2ban).
-        filter = sshd
-        # Archivo de log a monitorizar. NixOS lo configura automáticamente.
-        logpath = /var/log/auth.log
-        # Número de reintentos antes de banear.
-        maxretry = 3
-        # Tiempo de baneo en segundos (1 hora).
-        bantime = 3600
-      '';
-    };
-  };
+   };
 
   # --- 5. Seguridad del Sistema de Archivos ---
   # (Tu configuración existente se mantiene aquí)
