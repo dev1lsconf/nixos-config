@@ -9,7 +9,7 @@ with pkgs; [
   powerline
   tty-clock
   neovim
-  vim
+  (vim_configurable.override { python3 = pkgs.python3; }) 
   irssi
   screenfetch
 

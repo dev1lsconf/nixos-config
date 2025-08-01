@@ -33,6 +33,6 @@ Los componentes clave de esta configuración modular incluyen:
 
 Esta estructura contribuye a una configuración de sistema organizada y clara.
 
-## Idioma
+## Nix
 
-Todo el código de configuración de este repositorio está escrito en **Nix**, constituyendo el **100.0%** de los lenguajes de programación utilizados [3].
+Todo el código de configuración de este repositorio está escrito en **Nix** [3].
