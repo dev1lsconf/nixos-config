@@ -37,7 +37,8 @@ in
   # Enable Plymouth
   boot.plymouth = {
     enable = true;
-    theme = "breeze";
+    theme = "glow";
+    themePackages = [ pkgs.adi1090x-plymouth-themes ];
   };
   #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
