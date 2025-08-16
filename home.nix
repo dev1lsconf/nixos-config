@@ -7,9 +7,9 @@
   home-manager.users.dev1ls = {
     # Importa las listas de paquetes categorizadas
     imports = [
-      ./modules/pkgs/pkgs-cli.nix
-      ./modules/pkgs/pkgs-gui.nix
-      ./modules/pkgs/pkgs-dev.nix
+      ./pkgs-cli.nix
+      ./pkgs-gui.nix
+      ./pkgs-dev.nix
     ];
 
     # Home Manager necesita un poco de información sobre ti y las rutas que debe gestionar.

@@ -26,16 +26,34 @@
 
   # 2. Salidas (Outputs)
   # Aquí defines lo que tu Flake "produce". En este caso, una configuración de NixOS.
-  outputs = { self, nixpkgs, home-manager, hyprland, nixpkgs-unstable, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, hyprland, nixpkgs-unstable, ... }@inputs:
+  let
+    # Definimos el sistema para reutilizarlo
+    system = "x86_64-linux";
+    
+    # Creamos un overlay para añadir paquetes de unstable
+    unstable-overlay = final: prev: {
+      unstable = import nixpkgs-unstable {
+        inherit system;
+        # Opcional: si quieres que los paquetes de unstable también tengan unfree
+        config.allowUnfree = true; 
+      };
+    };
 
+  in {
     # La configuración de tu sistema NixOS
     nixosConfigurations = {
-      # ¡¡IMPORTANTE!! Cambia "mi-nixos-pc" por el hostname real de tu máquina.
+      # ¡¡IMPORTANTE!! Cambia "thinkCentre" por el hostname real de tu máquina.
       # Puedes ver tu hostname con el comando `hostname`.
       thinkcentre = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         specialArgs = { inherit inputs; };
         modules = [
+         # Añadimos el overlay a nuestra configuración
+          ({ config, pkgs, ... }: {
+            nixpkgs.overlays = [ unstable-overlay ];
+          })
+         
          # Tu configuración principal
           ./configuration.nix
 

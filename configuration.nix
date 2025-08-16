@@ -25,18 +25,7 @@ in
 
   # 1. Global Settings
   # ============================================================================
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "steam"
-    "steam-run"
-    "spotify"
-    "brave"
-    "google-chrome"
-    "unrar"
-    "stremio-shell"
-    "stremio-server"
-    "steam-unwrapped"
-    "vscodium"
-  ];
+  nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05";
 
@@ -44,7 +33,7 @@ in
   # ============================================================================
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
+  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
   # 3. Networking
   # ============================================================================
@@ -52,7 +41,7 @@ in
   networking.networkmanager.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 ];
   # Reglas específicas para la interfaz ygg0
-  networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 ];
+  networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 80 ];
 
   #networking.firewall.extraCommands = ''
   #  iptables -A nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
