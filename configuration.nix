@@ -33,6 +33,12 @@ in
   # ============================================================================
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Enable Plymouth
+  boot.plymouth = {
+    enable = true;
+    theme = "breeze";
+  };
   #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
   # 3. Networking
