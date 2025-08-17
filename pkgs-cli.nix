@@ -8,9 +8,6 @@ with pkgs; [
   tmux
   powerline
   tty-clock
-  neovim
-  vimplugin-ollama.nvim 
-  vimplugin-vim-plug
   irssi
   screenfetch
 
@@ -67,7 +64,9 @@ with pkgs; [
   translate-shell
   glow
   pipx
-  
+  neovim
+  vim
+
   # --- Contenedores (CLI) ---
   podman-tui
   podman-compose

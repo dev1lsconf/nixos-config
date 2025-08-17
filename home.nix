@@ -1,44 +1,35 @@
 # /home/dev1ls/nixos-config/home.nix
-# SUGERENCIA: Este archivo ahora gestiona toda la configuración de Home Manager.
 { config, pkgs, ... }:
 
+let
+  cli-pkgs = import ./pkgs-cli.nix { inherit pkgs; };
+  gui-pkgs = import ./pkgs-gui.nix { inherit pkgs; };
+  dev-pkgs = import ./pkgs-dev.nix { inherit pkgs; };
+in
 {
-  # Configuración de Home Manager para el usuario 'dev1ls'
-  home-manager.users.dev1ls = {
-    # Importa las listas de paquetes categorizadas
-    imports = [
-      ./pkgs-cli.nix
-      ./pkgs-gui.nix
-      ./pkgs-dev.nix
-    ];
+  # Home Manager necesita un poco de información sobre ti y las rutas que debe gestionar.
+  home.username = "dev1ls";
+  home.homeDirectory = "/home/dev1ls";
+  home.stateVersion = "25.05";
 
-    # Home Manager necesita un poco de información sobre ti y las rutas que debe gestionar.
-    home.username = "dev1ls";
-    home.homeDirectory = "/home/dev1ls";
+  # Combinamos todas las listas de paquetes en una sola.
+  home.packages = cli-pkgs ++ gui-pkgs ++ dev-pkgs;
 
-    # Este valor determina la versión de Home Manager con la que tu configuración es compatible.
-    home.stateVersion = "25.05";
+  # --- Configuración de Programas ---
+  programs.home-manager.enable = true;
 
-    # La lista de paquetes ahora está vacía aquí porque se define en los módulos importados.
-    # Home Manager combinará automáticamente las listas de los `imports`.
-    home.packages = [ ];
-
-    # --- Configuración de Programas ---
-    programs.home-manager.enable = true;
-
-    programs.git = {
-      enable = true;
-      userName = "dev1lsconf";
-      userEmail = "dev1lsconf@gmail.com";
-    };
-    
-    programs.gh = {
-      enable = true;
-      settings.git_protocol = "ssh";
-    };
-
-    programs.fish.enable = true;
-    
-    programs.firefox.enable = true;
+  programs.git = {
+    enable = true;
+    userName = "dev1lsconf";
+    userEmail = "dev1lsconf@gmail.com";
   };
+  
+  programs.gh = {
+    enable = true;
+    settings.git_protocol = "ssh";
+  };
+
+  programs.fish.enable = true;
+  
+  programs.firefox.enable = true;
 }
