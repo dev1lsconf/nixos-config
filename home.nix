@@ -7,6 +7,9 @@ let
   dev-pkgs = import ./pkgs-dev.nix { inherit pkgs; };
 in
 {
+  # Permitir paquetes no libres en home-manager
+  nixpkgs.config.allowUnfree = true;
+
   # Home Manager
   home.username = "dev1ls";
   home.homeDirectory = "/home/dev1ls";
@@ -40,7 +43,18 @@ in
     };
   };
 
-  programs.fish.enable = true;
+   programs.fish = {
+     enable = true;
+     shellAbbrs = {
+       "g" = "git";
+       "god reload" = "doas nixos-rebuild switch --flake .#thinkcentre";
+       "god update" = "nix flake update";
+     };
+     plugins = with pkgs.fishPlugins; [
+       { name = "fzf-fish"; src = fzf-fish; }
+       { name = "z"; src = z; }
+     ];
+   };
   
   programs.firefox.enable = true;
 }

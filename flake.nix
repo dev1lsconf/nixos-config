@@ -17,14 +17,12 @@
     unstable-overlay = final: prev: {
       unstable = import nixpkgs-unstable {
         inherit system;
-        config.allowUnfree = true; 
       };
     };
 
     # pkgs aquí para para ambos outputs
     pkgs = import nixpkgs {
       inherit system;
-      config.allowUnfree = true;
       overlays = [ unstable-overlay ];
     };
 

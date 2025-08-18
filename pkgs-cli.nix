@@ -16,6 +16,7 @@ with pkgs; [
   fzf
   fd
   ripgrep
+  nix-index
   ranger
   unzip
   unrar
