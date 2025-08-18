@@ -44,8 +44,8 @@ in
      enable = true;
      shellAbbrs = {
        "g" = "git";
-       "god reload" = "doas nixos-rebuild switch --flake .#thinkcentre";
-       "god update" = "nix flake update";
+       "god-re" = "doas nixos-rebuild switch --flake .#thinkcentre";
+       "god-up" = "nix flake update";
      };
      plugins = with pkgs.fishPlugins; [
        { name = "fzf-fish"; src = fzf-fish; }
