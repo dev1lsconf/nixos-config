@@ -27,6 +27,7 @@
   services.tailscale.enable = true;
   services.ollama.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  services.upower.enable = true;
   
   
   # Virtualisation
