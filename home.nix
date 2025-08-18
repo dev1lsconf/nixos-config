@@ -7,9 +7,6 @@ let
   dev-pkgs = import ./pkgs-dev.nix { inherit pkgs; };
 in
 {
-  # Permitir paquetes no libres en home-manager
-  nixpkgs.config.allowUnfree = true;
-
   # Home Manager
   home.username = "dev1ls";
   home.homeDirectory = "/home/dev1ls";
