@@ -6,6 +6,7 @@ with pkgs; [
   # --- Shells & Terminal ---
   fish
   tmux
+  screen
   powerline
   tty-clock
   irssi

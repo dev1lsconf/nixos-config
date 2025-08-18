@@ -12,6 +12,7 @@
     "net.ipv4.conf.all.log_martians" = 1;
   };
   boot.kernel.features.randomize_va_space.enable = true;
+  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
   # --- 2. Cortafuegos (Firewall) Estricto ---
   networking.firewall = {
