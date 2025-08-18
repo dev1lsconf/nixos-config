@@ -20,7 +20,7 @@
  
   services.endlessh = {
        enable = true;
-       port = 22; # Puerto donde Endlessh escuchará (puedes cambiarlo)
+       port = 22; # Puerto donde Endlessh escuchará
      };
   
 

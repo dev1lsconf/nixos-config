@@ -1,12 +1,7 @@
 # /home/dev1ls/nixos-config/configuration.nix
 # Archivo de configuración principal de NixOS
-# COPIA MODIFICADA con Steam y Proton
 { config, pkgs, inputs, lib, ... }:
 
-# Crear una referencia explícita al conjunto de paquetes principal para evitar problemas de alcance.
-let
-  mainPkgs = pkgs;
-in
 {
   imports = [
     # Archivos base generados por NixOS
@@ -19,13 +14,8 @@ in
     ./modules/security.nix
   ];
 
-  
-
-  
-
   # 1. Global Settings
   # ============================================================================
-  nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05";
 
@@ -40,24 +30,17 @@ in
     theme = "rings";
     themePackages = [ pkgs.adi1090x-plymouth-themes ];
   };
-  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
+ 
+
+ #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
   # 3. Networking
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 6050 18226 2225 ];
+  networking.firewall.allowedTCPPorts = [ 22 6050 18226 2225 ];
   # Reglas específicas para la interfaz ygg0
   networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 80 ];
-
-  #networking.firewall.extraCommands = ''
-  #  iptables -A nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
-  #  iptables -A nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
-  #'';
-  #networking.firewall.extraStopCommands = ''
-  #  iptables -D nixos-fw -i ygg0 -p tcp --dport 6667 -j ACCEPT
-  #  iptables -D nixos-fw -i ygg0 -p tcp --dport 6697 -j ACCEPT
-  #'';
  
   services.yggdrasil = {
   enable = true;
@@ -106,7 +89,7 @@ in
   # 5. System-wide Packages
   # ============================================================================
   environment.systemPackages = with pkgs; [
-    git # Added git for system-wide availability
+    git
     prometheus-node-exporter
   ];
 
@@ -129,7 +112,7 @@ in
 
   # 8. Gaming Support
   # ============================================================================
-  # AÑADIDO: Habilita Steam y sus dependencias de forma idiomática.
+  # AÑADIDO: Habilita Steam y sus dependencias.
   programs.steam.enable = true;
 
   # AÑADIDO: Habilita el soporte para gráficos 32-bit, crucial para Steam y Proton.

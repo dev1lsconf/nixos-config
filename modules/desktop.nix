@@ -18,7 +18,7 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = pkgs.unstable.hyprland;
   };
 
   # XDG Portals
@@ -34,7 +34,7 @@
     enable = true;
     extraPackages = with pkgs; [
       intel-media-sdk
-      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
+      pkgs.unstable.xdg-desktop-portal-hyprland
     ];
   };
   

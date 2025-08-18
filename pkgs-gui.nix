@@ -26,7 +26,7 @@ with pkgs; [
   grim
   slurp
   wf-recorder
-  neofetch # Comúnmente usado en capturas de pantalla de GUI
+  neofetch # 
 
   # --- Navegadores y Aplicaciones de Internet ---
   brave

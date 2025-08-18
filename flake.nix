@@ -8,13 +8,9 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, hyprland, nixpkgs-unstable, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixpkgs-unstable, ... }@inputs:
   let
     system = "x86_64-linux";
     
@@ -25,7 +21,7 @@
       };
     };
 
-    # Definimos pkgs aquí para que esté disponible para ambos outputs
+    # pkgs aquí para para ambos outputs
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
@@ -37,15 +33,15 @@
       thinkcentre = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
+        pkgs = pkgs;
         modules = [
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.users.dev1ls = import ./home.nix;
-            # El overlay se pasa a través de la definición de `pkgs` que NixOS usará
-            nixpkgs.overlays = [ unstable-overlay ];
           }
         ];
       };

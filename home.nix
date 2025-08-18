@@ -7,12 +7,12 @@ let
   dev-pkgs = import ./pkgs-dev.nix { inherit pkgs; };
 in
 {
-  # Home Manager necesita un poco de información sobre ti y las rutas que debe gestionar.
+  # Home Manager
   home.username = "dev1ls";
   home.homeDirectory = "/home/dev1ls";
   home.stateVersion = "25.05";
 
-  # Combinamos todas las listas de paquetes en una sola.
+  # listas de paquetes
   home.packages = cli-pkgs ++ gui-pkgs ++ dev-pkgs;
 
   # --- Configuración de Programas ---
@@ -27,6 +27,17 @@ in
   programs.gh = {
     enable = true;
     settings.git_protocol = "ssh";
+  };
+
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
+    matchBlocks = {
+      "github.com" = {
+        user = "git";
+        identityFile = "/home/dev1ls/.ssh/id_ed25519";
+      };
+    };
   };
 
   programs.fish.enable = true;
