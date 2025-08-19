@@ -35,7 +35,8 @@
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 6050 18226 2225 ];
+  networking.firewall.checkReversePath = "loose";
+  networking.firewall.allowedTCPPorts = [ 22 6050 18226 2225 19999 ];
   # Reglas específicas para la interfaz ygg0
   networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 80 ];
  
@@ -64,6 +65,15 @@
     };
   };
    
+  # Enable Netdata for system monitoring
+  services.netdata = {
+    enable = true;
+  };
+
+  services.netdata.package = pkgs.netdata.override {
+  withCloudUi = true;
+  };
+
   # Enable Bluetooth
   hardware.bluetooth.enable = true;
 
@@ -117,4 +127,11 @@
   #hardware.opengl.driSupport32Bit = true;
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
+
+  # 9. Home Manager
+  # ============================================================================
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "backup";
+  home-manager.users.dev1ls = import ./home.nix;
 }

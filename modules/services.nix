@@ -37,6 +37,30 @@
     defaultNetwork.settings.dns_enabled = true;
   };
   
-   
-  
+  # Reverse Proxy for Yggdrasil Web Service
+  services.nginx = {
+    enable = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    # Proxy for the ygg-web-custom container
+    virtualHosts."yggdrasil-web" = {
+      listen = [
+        { addr = "[::]"; port = 80; }
+      ];
+      
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:8080";
+      };
+    };
+  };
+
+  # Systemd dependency to ensure Nginx starts after Yggdrasil is ready
+  systemd.services.nginx = {
+    after = [ "yggdrasil.service" ];
+    wantedBy = [ "multi-user.target" ];
+  };
+
 }
