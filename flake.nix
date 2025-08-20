@@ -13,11 +13,12 @@
   outputs = { self, nixpkgs, home-manager, nixpkgs-unstable, ... }@inputs:
   let
     system = "x86_64-linux";
-    
+    username = "dev1ls"; # <-- 1. Definir el nombre de usuario aquí
+
     unstable-overlay = final: prev: {
       unstable = import nixpkgs-unstable {
         inherit system;
-        config.allowUnfree = true; 
+        config.allowUnfree = true;
       };
     };
 
@@ -32,7 +33,8 @@
     nixosConfigurations = {
       thinkcentre = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        # 2. Pasar 'username' a todos los módulos a través de specialArgs
+        specialArgs = { inherit inputs username; };
         pkgs = pkgs;
         modules = [
           ./configuration.nix

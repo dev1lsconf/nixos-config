@@ -1,5 +1,5 @@
 # /home/dev1ls/nixos-config/home.nix
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 let
   cli-pkgs = import ./pkgs-cli.nix { inherit pkgs; };
@@ -8,8 +8,8 @@ let
 in
 {
   # Home Manager
-  home.username = "dev1ls";
-  home.homeDirectory = "/home/dev1ls";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.stateVersion = "25.05";
 
   # listas de paquetes
@@ -35,7 +35,7 @@ in
     matchBlocks = {
       "github.com" = {
         user = "git";
-        identityFile = "/home/dev1ls/.ssh/id_ed25519";
+        identityFile = "/home/${username}/.ssh/id_ed25519";
       };
     };
   };

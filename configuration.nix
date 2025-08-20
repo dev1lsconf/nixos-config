@@ -1,6 +1,6 @@
 # /home/dev1ls/nixos-config/configuration.nix
 # Archivo de configuración principal de NixOS
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, inputs, lib, username, ... }:
 
 {
   imports = [
@@ -113,7 +113,7 @@
   # ============================================================================
   security.doas = {
     enable = true;
-    extraRules = [{ users = [ "dev1ls" ]; keepEnv = true; persist = true; }];
+    extraRules = [{ users = [ username ]; keepEnv = true; persist = true; }];
   };
   security.sudo.enable = false;
 
@@ -133,5 +133,5 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
-  home-manager.users.dev1ls = import ./home.nix;
+  home-manager.users.${username} = import ./home.nix;
 }
