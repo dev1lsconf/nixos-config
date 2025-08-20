@@ -35,7 +35,7 @@
   # ============================================================================
   networking.hostName = "thinkcentre";
   networking.networkmanager.enable = true;
-  networking.firewall.checkReversePath = "loose";
+  
   networking.firewall.allowedTCPPorts = [ 22 6050 18226 2225 19999 ];
   # Reglas específicas para la interfaz ygg0
   networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 80 ];
