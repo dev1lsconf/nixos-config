@@ -26,23 +26,22 @@
     enable = true;
   };
 
-  # --- 4. Fail2ban (CORREGIDO Y ASEGURADO) ---
+  # --- 4. Fail2ban (SOLUCIÓN CORRECTA Y DEFINITIVA) ---
   # Servicio de protección contra ataques de fuerza bruta.
   services.fail2ban = {
     enable = true;
-    # IPs a ignorar. Es CRUCIAL añadir localhost y, si tienes, tu IP estática local.
     ignoreIP = [ "127.0.0.1" "::1" ];
-    # Define cárceles específicas. La configuración por defecto no protegerá
-    # tu puerto SSH no estándar.
-    jails."sshd" = ''
-      [sshd]
-      enabled = true
-      port = 2225
-      filter = sshd
-      # fail2ban en NixOS se integra con journald, por lo que no se necesita logpath.
-      maxretry = 3
-    '';
-   };
+    # Definimos la cárcel 'sshd' con la estructura correcta para que se fusione
+    # con la configuración automática del módulo openssh.
+    jails.sshd = {
+      enabled = true;
+      # Los parámetros específicos van dentro del sub-atributo 'settings'.
+      settings = {
+        port = 2225;
+        maxretry = 3;
+      };
+    };
+  };
 
   # --- 5. Seguridad del Sistema de Archivos ---
   boot.tmp.useTmpfs = true;

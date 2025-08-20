@@ -133,5 +133,7 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
+  # Pasa la variable 'username' a los módulos de home-manager
+  home-manager.extraSpecialArgs = { inherit username; };
   home-manager.users.${username} = import ./home.nix;
 }
