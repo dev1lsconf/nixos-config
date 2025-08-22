@@ -12,9 +12,8 @@
     "net.ipv4.conf.all.log_martians" = 1;
   };
   boot.kernel.features.randomize_va_space.enable = true;
-  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" =80;
 
-  # --- 2. Cortafuegos (Firewall) Estricto ---
+# --- 2. Cortafuegos (Firewall) Estricto ---
   networking.firewall = {
     enable = true;
     rejectPackets = true;
@@ -26,16 +25,13 @@
     enable = true;
   };
 
-  # --- 4. Fail2ban (SOLUCIÓN CORRECTA Y DEFINITIVA) ---
+  # --- 4. Fail2ban  ---
   # Servicio de protección contra ataques de fuerza bruta.
   services.fail2ban = {
     enable = true;
     ignoreIP = [ "127.0.0.1" "::1" ];
-    # Definimos la cárcel 'sshd' con la estructura correcta para que se fusione
-    # con la configuración automática del módulo openssh.
     jails.sshd = {
       enabled = true;
-      # Los parámetros específicos van dentro del sub-atributo 'settings'.
       settings = {
         port = 2225;
         maxretry = 3;

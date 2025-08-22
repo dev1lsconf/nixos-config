@@ -26,7 +26,7 @@ with pkgs; [
   grim
   slurp
   wf-recorder
-  neofetch # 
+  networkmanagerapplet
 
   # --- Navegadores y Aplicaciones de Internet ---
   brave
@@ -40,6 +40,8 @@ with pkgs; [
   nsxiv
   ffmpeg
   yt-dlp
+  papirus-icon-theme
+  jetbrains-mono
   gnome-screenshot
   shutter
   

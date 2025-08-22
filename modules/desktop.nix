@@ -6,7 +6,7 @@
   services.xserver = {
     enable = true;
     videoDrivers = [ "modesetting" ];
-    displayManager.lightdm.enable = true;  
+    displayManager.gdm.enable = true;  
     windowManager.i3.enable = true;
     windowManager.cwm.enable = true;
     xkb = { layout = "es"; variant = ""; };
@@ -34,7 +34,6 @@
     enable = true;
     extraPackages = with pkgs; [
       intel-media-sdk
-      pkgs.unstable.xdg-desktop-portal-hyprland
     ];
   };
   

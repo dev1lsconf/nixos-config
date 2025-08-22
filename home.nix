@@ -1,10 +1,10 @@
 # /home/dev1ls/nixos-config/home.nix
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, configDir, ... }:
 
 let
-  cli-pkgs = import ./pkgs-cli.nix { inherit pkgs; };
-  gui-pkgs = import ./pkgs-gui.nix { inherit pkgs; };
-  dev-pkgs = import ./pkgs-dev.nix { inherit pkgs; };
+  cli-pkgs = import "${configDir}/pkgs/pkgs-cli.nix" { inherit pkgs; };
+  gui-pkgs = import "${configDir}/pkgs/pkgs-gui.nix" { inherit pkgs; };
+  dev-pkgs = import "${configDir}/pkgs/pkgs-dev.nix" { inherit pkgs; };
 in
 {
   # Home Manager
@@ -54,4 +54,11 @@ in
    };
   
   programs.firefox.enable = true;
+
+  # --- Declarative Hyprland Config ---
+  xdg.configFile = {
+    "hypr/hyprland.conf".source = "${configDir}/hypr/hyprland.conf";
+    "hypr/keybindings.conf".source = "${configDir}/hypr/keybindings.conf";
+    "hypr/windowrules.conf".source = "${configDir}/hypr/windowrules.conf";
+  };
 }

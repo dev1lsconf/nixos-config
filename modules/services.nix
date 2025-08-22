@@ -5,7 +5,7 @@
   # System Services
   #services.printing.enable = true;
   services.flatpak.enable = true; 
-  #services.openssh.enable = true;
+  
   services.openssh = {
     enable = true;
     # require public key authentication for better security

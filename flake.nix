@@ -21,21 +21,19 @@
         config.allowUnfree = true;
       };
     };
-
-    # pkgs aquí para para ambos outputs
+  in {
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
       overlays = [ unstable-overlay ];
     };
 
-  in {
     nixosConfigurations = {
       thinkcentre = nixpkgs.lib.nixosSystem {
         inherit system;
-        # 2. Pasar 'username' a todos los módulos a través de specialArgs
-        specialArgs = { inherit inputs username; };
-        pkgs = pkgs;
+        # 'username' a todos los módulos desde specialArgs
+        specialArgs = { inherit inputs username; configDir = self; }; # <--- NUEVO: pkgsDir
+        pkgs = self.pkgs;
         modules = [
           ./configuration.nix
           home-manager.nixosModules.home-manager

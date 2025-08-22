@@ -1,6 +1,6 @@
 # /home/dev1ls/nixos-config/configuration.nix
 # Archivo de configuración principal de NixOS
-{ config, pkgs, inputs, lib, username, ... }:
+{ config, pkgs, inputs, lib, username, configDir, ... }:
 
 {
   imports = [
@@ -34,9 +34,8 @@
   # 3. Networking
   # ============================================================================
   networking.hostName = "thinkcentre";
-  networking.networkmanager.enable = true;
-  
-  networking.firewall.allowedTCPPorts = [ 22 6050 18226 2225 19999 ];
+  networking.networkmanager.enable = true; 
+  networking.firewall.allowedTCPPorts = [ 6050 18226 2225 19999 ];
   # Reglas específicas para la interfaz ygg0
   networking.firewall.interfaces."ygg0".allowedTCPPorts = [ 6667 80 ];
  
@@ -96,7 +95,6 @@
   # 5. System-wide Packages
   # ============================================================================
   environment.systemPackages = with pkgs; [
-    git
     prometheus-node-exporter
   ];
 
@@ -134,6 +132,5 @@
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
   # Pasa la variable 'username' a los módulos de home-manager
-  home-manager.extraSpecialArgs = { inherit username; };
-  home-manager.users.${username} = import ./home.nix;
+  home-manager.users.${username} = import ./home.nix { inherit config pkgs lib inputs username configDir; };
 }

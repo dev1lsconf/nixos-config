@@ -44,6 +44,7 @@ with pkgs; [
   ncpamixer
   wl-clipboard
   zenith
+  neofetch
 
   # --- Clientes de Servicios y Redes Sociales ---
   gemini-cli
