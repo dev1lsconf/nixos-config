@@ -32,7 +32,7 @@
       thinkcentre = nixpkgs.lib.nixosSystem {
         inherit system;
         # 'username' a todos los módulos desde specialArgs
-        specialArgs = { inherit inputs username; configDir = self; }; # <--- NUEVO: pkgsDir
+        specialArgs = { inherit inputs username; configDir = self; };
         pkgs = self.pkgs;
         modules = [
           ./configuration.nix
